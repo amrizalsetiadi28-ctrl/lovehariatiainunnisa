@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Selamat Ulang Tahun, Ainun</title>
+<meta name="description" content="Sebuah kejutan kecil untuk Hariati Ainun Nisa. Buka dan baca sampai habis ya.">
+<meta name="theme-color" content="#f6e3e0">
+
+<!-- Preview saat dibagikan lewat WhatsApp (Open Graph).
+     Setelah website online, ganti og:image dan og:url dengan alamat lengkap (https://...) -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Selamat Ulang Tahun, Ainun 💖">
+<meta property="og:description" content="Sebuah kejutan kecil dariku. Buka dan baca sampai habis ya.">
+<meta property="og:image" content="assets/photos/foto1.jpg">
+<meta property="og:locale" content="id_ID">
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- Favicon hati -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23b76e79' d='M50 88C20 62 8 46 8 32a20 20 0 0 1 42-6 20 20 0 0 1 42 6c0 14-12 30-42 56z'/%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Great+Vibes&family=Playfair+Display:wght@400;500;600&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+
+<script>document.documentElement.classList.add('js');</script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="locked">
+
+<!-- Latar partikel (kelopak & hati) -->
+<canvas id="bgCanvas" aria-hidden="true"></canvas>
+<!-- Lapisan confetti & kembang api -->
+<canvas id="fxCanvas" aria-hidden="true"></canvas>
+
+<audio id="bgm" src="assets/music/lagu.mp3" loop preload="auto"></audio>
+
+<!-- 1. LAYAR PEMBUKA -->
+<div id="splash" class="splash" role="dialog" aria-label="Layar pembuka">
+  <div class="splash-inner">
+    <p class="splash-kicker" data-bind="splash.kicker"></p>
+    <h1 class="splash-name" data-bind="herNick"></h1>
+    <div class="envelope" id="envelope" aria-hidden="true">
+      <div class="env-back"></div>
+      <div class="env-letter"><span>♥</span></div>
+      <div class="env-front"></div>
+      <div class="env-flap"></div>
+      <div class="env-seal">♥</div>
+    </div>
+    <button id="openBtn" class="btn-primary" type="button" data-bind="splash.button"></button>
+    <p class="splash-hint" data-bind="splash.hint"></p>
+  </div>
+</div>
+
+<!-- Tombol musik -->
+<button id="musicBtn" class="music-btn paused" type="button" aria-label="Matikan atau nyalakan musik" title="Musik">
+  <span class="bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+</button>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<main id="main">
+
+  <!-- 2. HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-glow" id="heroGlow" aria-hidden="true"></div>
+    <div class="hero-content" id="heroContent">
+      <p class="eyebrow hero-anim" style="--i:0" data-bind="hero.kicker"></p>
+      <h2 class="hero-script hero-anim" style="--i:1" data-bind="hero.title"></h2>
+      <h1 class="hero-name hero-anim" style="--i:2" data-bind="herName"></h1>
+      <div class="ornament hero-anim" style="--i:3" aria-hidden="true"><span></span><b>♥</b><span></span></div>
+      <p class="hero-sub hero-anim" style="--i:4" data-bind="hero.subtitle"></p>
+      <div class="hero-chips hero-anim" style="--i:5">
+        <span class="chip" id="chipAge"></span>
+        <span class="chip" id="chipDays"></span>
+      </div>
+    </div>
+    <a href="#countdown" class="scroll-cue" aria-label="Gulir ke bawah"><span></span></a>
+  </section>
+
+  <!-- 3. COUNTDOWN -->
+  <section class="section section-tint" id="countdown">
+    <div class="container narrow">
+      <header class="section-head reveal">
+        <p class="eyebrow" data-bind="countdown.eyebrow"></p>
+        <h2 class="section-title" data-bind="countdown.title"></h2>
+        <p class="section-sub" data-bind="countdown.subtitle"></p>
+      </header>
+
+      <div class="cd-grid reveal" id="cdGrid" aria-live="off">
+        <div class="time-card"><strong id="cdDays">00</strong><span>Hari</span></div>
+        <div class="time-card"><strong id="cdHours">00</strong><span>Jam</span></div>
+        <div class="time-card"><strong id="cdMins">00</strong><span>Menit</span></div>
+        <div class="time-card"><strong id="cdSecs">00</strong><span>Detik</span></div>
+      </div>
+
+      <div class="celebrate glass" id="celebrate">
+        <p class="celebrate-script" data-bind="celebrate.title"></p>
+        <h3 class="celebrate-name" data-bind="herName"></h3>
+        <p class="celebrate-text" data-bind="celebrate.text"></p>
+        <button class="btn-primary small" id="replayFx" type="button" data-bind="celebrate.button"></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. GALERI -->
+  <section class="section" id="gallery">
+    <div class="container">
+      <header class="section-head reveal">
+        <p class="eyebrow" data-bind="gallery.eyebrow"></p>
+        <h2 class="section-title" data-bind="gallery.title"></h2>
+        <p class="section-sub" data-bind="gallery.subtitle"></p>
+      </header>
+      <div class="gallery-grid" id="galleryGrid"></div>
+    </div>
+  </section>
+
+  <!-- 5. TIMELINE -->
+  <section class="section section-tint" id="timeline">
+    <div class="container">
+      <header class="section-head reveal">
+        <p class="eyebrow" data-bind="timeline.eyebrow"></p>
+        <h2 class="section-title" data-bind="timeline.title"></h2>
+        <p class="section-sub" data-bind="timeline.subtitle"></p>
+      </header>
+      <div class="timeline" id="timelineList"></div>
+    </div>
+  </section>
+
+  <!-- 6. SURAT CINTA -->
+  <section class="section" id="letter">
+    <div class="container narrow">
+      <header class="section-head reveal">
+        <p class="eyebrow" data-bind="letter.eyebrow"></p>
+        <h2 class="section-title" data-bind="letter.title"></h2>
+      </header>
+      <article class="letter-card reveal" id="letterCard">
+        <div class="letter-seal" aria-hidden="true">♥</div>
+        <div id="letterBody"></div>
+        <div class="letter-end">
+          <p class="letter-closing" data-bind="letter.closing"></p>
+          <p class="letter-sign" data-bind="myName"></p>
+        </div>
+        <button id="skipType" class="link-btn" type="button" data-bind="letter.skip"></button>
+      </article>
+    </div>
+  </section>
+
+  <!-- 7. PENUTUP -->
+  <section class="section closing" id="closing">
+    <div class="container narrow">
+      <div class="ornament reveal" aria-hidden="true"><span></span><b>♥</b><span></span></div>
+      <p class="closing-text reveal" data-bind="closing.text"></p>
+      <p class="closing-script reveal" data-bind="closing.script"></p>
+      <p class="closing-sign reveal" data-bind="myName"></p>
+      <button id="toTop" class="btn-primary reveal" type="button" data-bind="closing.button"></button>
+      <p class="footer-note" data-bind="closing.footer"></p>
+    </div>
+  </section>
+
+</main>
+
+<!-- Lightbox foto -->
+<div id="lightbox" class="lightbox" aria-hidden="true" role="dialog" aria-label="Foto kenangan">
+  <button class="lb-close" type="button" aria-label="Tutup">×</button>
+  <button class="lb-nav lb-prev" type="button" aria-label="Foto sebelumnya">‹</button>
+  <figure>
+    <img id="lbImg" alt="">
+    <figcaption><strong id="lbCaption"></strong><span id="lbDate"></span></figcaption>
+  </figure>
+  <button class="lb-nav lb-next" type="button" aria-label="Foto berikutnya">›</button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
